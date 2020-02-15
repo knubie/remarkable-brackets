@@ -6,6 +6,7 @@ module.exports = function make_parser(opts) {
   var name = opts.name;
   var opener = opts.opener;
   var closer = opts.closer;
+  var allowSpace = opts.allowSpace;
   var openerCharCode = opener.charCodeAt(0);
   var closerCharCode = closer.charCodeAt(0);
 
@@ -27,18 +28,19 @@ module.exports = function make_parser(opts) {
     lastChar = start > 0 ? state.src.charCodeAt(start - 1) : -1;
     nextChar = state.src.charCodeAt(start + 2);
 
-    if (lastChar === openerCharCode) { return false; }
-    if (nextChar === openerCharCode) { return false; }
-    if (nextChar === 0x20 || nextChar === 0x0A) { return false; }
+    // if (lastChar === openerCharCode) { return false; }
+    // if (nextChar === openerCharCode) { return false; }
+    // 0x20 is a space, I don't think this should matter.
+    if ((!allowSpace && nextChar === 0x20) || nextChar === 0x0A) { return false; }
 
     pos = start + 2;
-    while (pos < max && state.src.charCodeAt(pos) === openerCharCode) { pos++; }
-    if (pos !== start + 2) {
-      // sequence of 3+ markers taking as literal, same as in a emphasis
-      state.pos += pos - start;
-      if (!silent) { state.pending += state.src.slice(start, pos); }
-      return true;
-    }
+    // while (pos < max && state.src.charCodeAt(pos) === openerCharCode) { pos++; }
+    // if (pos !== start + 2) {
+    //   // sequence of 3+ markers taking as literal, same as in a emphasis
+    //   state.pos += pos - start;
+    //   if (!silent) { state.pending += state.src.slice(start, pos); }
+    //   return true;
+    // }
 
     state.pos = start + 2;
     stack = 1;
@@ -49,10 +51,12 @@ module.exports = function make_parser(opts) {
           lastChar = state.src.charCodeAt(state.pos - 1);
           nextChar = state.pos + 2 < max ? state.src.charCodeAt(state.pos + 2) : -1;
           if (nextChar !== openerCharCode && lastChar !== openerCharCode) {
-            if (lastChar !== 0x20 && lastChar !== 0x0A) {
+            // if (lastChar !== 0x0A) {
+            if ((allowSpace || lastChar !== 0x20) && lastChar !== 0x0A) {
               // closing '++'
               stack--;
-            } else if (nextChar !== 0x20 && nextChar !== 0x0A) {
+            // } else if (nextChar !== 0x0A) {
+            } else if ((allowSpace || nextChar !== 0x20) && nextChar !== 0x0A) {
               // opening '++'
               stack++;
             } // else {
