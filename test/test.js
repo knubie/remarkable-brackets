@@ -72,6 +72,15 @@ describe("Tests", function () {
     );
   });
 
+  it("foo bar", function () {
+    assert.strictEqual(
+      md.render('{{\n$$\n\\LaTeX\n$$\n}}'),
+      // md.render('$$\n\\LaTeX\n$$'),
+      '<foo><p>$$\n\\LaTeX\n$$</p>\n</foo>'
+      // '<p>$$\n\\LaTeX\n$$</p>\n'
+    );
+  });
+
   var test6 = '```\ncode\nfences\n```';
 
   it("code fences should still work", function () {

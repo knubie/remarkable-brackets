@@ -85,7 +85,7 @@ module.exports = function make_block_parser(opts) {
     len = state.tShift[startLine];
 
     const oldMax = state.lineMax;
-    state.lineMax = nextLine + (haveEndMarker ? -1 : 0);
+    state.lineMax = nextLine + (haveEndMarker ? 0 : -1);
     const oldParentType = state.parentType;
     state.parentType = name;
 
