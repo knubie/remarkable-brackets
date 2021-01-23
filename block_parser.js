@@ -84,24 +84,28 @@ module.exports = function make_block_parser(opts) {
     // If a fence has heading spaces, they should be removed from its inner block
     len = state.tShift[startLine];
 
-    state.line = nextLine + (haveEndMarker ? 1 : 0);
+    const oldMax = state.lineMax;
+    state.lineMax = nextLine + (haveEndMarker ? -1 : 0);
+    const oldParentType = state.parentType;
+    state.parentType = name;
+
+    let lines;
 
     state.tokens.push({
       type: name + '_open',
-      lines: [ startLine, state.line ],
+      lines: lines = [startLine, 0],
       level: state.level
     });
-    state.tokens.push({
-      type: 'inline',
-      content: state.getLines(startLine + 1, nextLine, len, false),
-      level: state.level + 1,
-      lines: [ startLine, nextLine ],
-      children: []
-    });
+    state.parser.tokenize(state, startLine + 1, nextLine);
     state.tokens.push({
       type: name + '_close',
       level: state.level
     });
+
+    lines[1] = nextLine;
+    state.line = nextLine + (haveEndMarker ? 1 : 0);
+    state.lineMax = oldMax;
+    state.parentType = oldParentType;
 
     return true;
   }
