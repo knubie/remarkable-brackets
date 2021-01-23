@@ -94,7 +94,8 @@ module.exports = function make_block_parser(opts) {
     state.tokens.push({
       type: name + '_open',
       lines: lines = [startLine, 0],
-      level: state.level
+      level: state.level,
+      block: true
     });
     state.parser.tokenize(state, startLine + 1, nextLine);
     state.tokens.push({
