@@ -61,7 +61,14 @@ describe("Tests", function () {
   it("{{with a line break}} should produce <foo>with a \\n line break</foo>", function () {
     assert.strictEqual(
       md.render(test5),
-      '<foo>with a\nline break\n</foo>'
+      '<foo>with a\nline break</foo>'
+    );
+  });
+
+  it("renders inner markdown in block form", function () {
+    assert.strictEqual(
+      md.render('{{\n_with emphasis_\n}}'),
+      '<foo><em>with emphasis</em></foo>'
     );
   });
 

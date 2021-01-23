@@ -85,11 +85,21 @@ module.exports = function make_block_parser(opts) {
     len = state.tShift[startLine];
 
     state.line = nextLine + (haveEndMarker ? 1 : 0);
+
     state.tokens.push({
-      type: name + '_block',
-      params: params,
-      content: state.getLines(startLine + 1, nextLine, len, true),
+      type: name + '_open',
       lines: [ startLine, state.line ],
+      level: state.level
+    });
+    state.tokens.push({
+      type: 'inline',
+      content: state.getLines(startLine + 1, nextLine, len, false),
+      level: state.level + 1,
+      lines: [ startLine, nextLine ],
+      children: []
+    });
+    state.tokens.push({
+      type: name + '_close',
       level: state.level
     });
 

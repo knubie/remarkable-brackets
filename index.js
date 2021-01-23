@@ -14,6 +14,5 @@ module.exports = function custom_bracket_rule(opts) {
 
     md.renderer.rules[name + '_open']  = renderer.opener(name);
     md.renderer.rules[name + '_close'] = renderer.closer(name);
-    md.renderer.rules[name + '_block'] = renderer.block(name);
   }
 }
