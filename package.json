@@ -1,7 +1,7 @@
 {
-  "name": "remarkable-furigana",
+  "name": "remarkable-brackets",
   "version": "1.0.2",
-  "description": "A furigana extension for remarkable",
+  "description": "An extension for remarkable to add generic bracket syntax.",
   "main": "index.js",
   "scripts": {
     "webpack_run": "./node_modules/.bin/webpack test/*.js browser_tests/tests.js",
@@ -11,7 +11,6 @@
   "keywords": [
     "remarkable",
     "remarkable-extension",
-    "furigana",
     "ruby"
   ],
   "author": "Matthew Steedman <matt@gmail.com>",
